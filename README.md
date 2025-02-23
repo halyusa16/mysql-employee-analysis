@@ -135,6 +135,11 @@ ON ed.employee_id = es.employee_id
 WHERE es.dept_id IS NULL;
 ```
 
+## 💻**Technologies Used**
+- 🛠️ Database: MySQL
+- 📚 Tools: MySQL Workbench, DBeaver, HeidiSQL
+- 📝 Languages: SQL
+
 ---
 ✨ _Created by Halyusa Ard Wahyudi as part of a data analytics portfolio._ 🚀
 
