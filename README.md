@@ -2,7 +2,9 @@
 
 
 ## 📌 Project Overview  
-This project is a **SQL-based portfolio** demonstrating **basic querying, table joins, aggregations, subqueries, and advanced SQL operations**. The dataset contain tables of employee details, salary information, and department assignments.  
+This project focuses on analyzing employee data through querying, performing table joins to connect related information, aggregating salary statistics, and using subqueries to extract meaningful insights.
+
+The dataset contain tables of employee details, salary information, and department assignments.  
 
 
 ## 📂 Database Schema  
