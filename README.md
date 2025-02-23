@@ -9,7 +9,7 @@ The dataset contain tables of employee details, salary information, and departme
 
 ## 📂 Database Schema  
 
-This project contains **three tables**:  
+This project contains database from [GitHub](https://github.com/AlexTheAnalyst/MySQL-YouTube-Series/blob/main/Beginner%20-%20Parks_and_Rec_Create_db.sql), contains **three tables**:  
 
 1. **`employee_demographics`** – Stores personal details of employees.  
 2. **`employee_salary`** – Contains salary and department details for employees.  
