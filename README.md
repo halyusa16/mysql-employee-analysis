@@ -1,4 +1,4 @@
-# 🏞️ Parks and Recreation Employee Database
+# Employee Database
 
 
 ## 📌 Project Overview  
