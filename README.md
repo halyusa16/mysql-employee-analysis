@@ -2,7 +2,7 @@
 
 
 ## 📌 Project Overview  
-This project focuses on analyzing employee data through querying, performing table joins to connect related information, aggregating salary statistics, and using subqueries to extract meaningful insights.
+This project focuses on practicing to extract and analyze employee data through querying, performing table joins to connect related information, aggregating salary statistics, and using subqueries to extract meaningful insights.
 
 The dataset contain tables of employee details, salary information, and department assignments.  
 
