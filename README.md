@@ -4,12 +4,12 @@
 ## 📌 Project Overview  
 This project focuses on practicing to extract and analyze employee data through querying, performing table joins to connect related information, aggregating salary statistics, and using subqueries to extract meaningful insights.
 
-The dataset contain tables of employee details, salary information, and department assignments.  
+The dataset contains tables of employee details, salary information, and department assignments.  
 
 
 ## 📂 Database Schema  
 
-This project contains database from [GitHub](https://github.com/AlexTheAnalyst/MySQL-YouTube-Series/blob/main/Beginner%20-%20Parks_and_Rec_Create_db.sql), contains **three tables**:  
+This project contains database from [GitHub](https://github.com/AlexTheAnalyst/MySQL-YouTube-Series/blob/main/Beginner%20-%20Parks_and_Rec_Create_db.sql), containing **three tables**:  
 
 1. **`employee_demographics`** – Stores personal details of employees.  
 2. **`employee_salary`** – Contains salary and department details for employees.  
@@ -29,15 +29,17 @@ This project contains database from [GitHub](https://github.com/AlexTheAnalyst/M
 ### 🔹 Basic Queries  
 #### 1️⃣ Get all employees older than 40  
 ```sql
-SELECT * 
-FROM parks_and_recreation.employee_demographics
+SELECT *
+FROM employee_demographics
 WHERE age > 40;
 ```
 
 #### 2️⃣ Retrieve first name, last name, and salary of all employees  
 ```sql
-SELECT first_name, last_name, salary
-FROM parks_and_recreation.employee_salary;
+SELECT dem.employee_id, dem.first_name, dem.last_name, sal.salary
+FROM employee_demographics dem
+JOIN employee_salary sal
+ON dem.employee_id = sal.employee_id;
 ```
 
 ---
@@ -45,94 +47,95 @@ FROM parks_and_recreation.employee_salary;
 ### 🔹 Joins & Sorting  
 #### 3️⃣ Get all employees along with their salary (Sorted by First Name)  
 ```sql
-SELECT ed.employee_id, ed.first_name, ed.last_name, es.salary
-FROM parks_and_recreation.employee_demographics ed 
-LEFT JOIN parks_and_recreation.employee_salary es 
-ON ed.employee_id = es.employee_id
-ORDER BY ed.first_name ASC;
+SELECT dem.employee_id, dem.first_name, dem.last_name, sal.salary
+FROM employee_demographics dem
+JOIN employee_salary sal
+ON dem.employee_id = sal.employee_id
+ORDER BY dem.first_name ASC;
 ```
 
 #### 4️⃣ Get employees and occupations, sorted by highest salary  
 ```sql
-SELECT ed.employee_id, ed.first_name, ed.last_name, es.occupation, es.salary
-FROM parks_and_recreation.employee_demographics ed 
-LEFT JOIN parks_and_recreation.employee_salary es
-ON ed.employee_id = es.employee_id
-ORDER BY es.salary DESC;
+SELECT dem.employee_id, dem.first_name, dem.last_name, sal.occupation, sal.salary
+FROM employee_demographics dem
+JOIN employee_salary sal
+ON dem.employee_id = sal.employee_id
+ORDER BY sal.salary DESC;
+```
+
+#### 5️⃣ Find employees data from Parks and Recreation Department  
+```sql
+SELECT dem.employee_id, dem.first_name, dem.last_name, sal.occupation, sal.salary
+FROM employee_demographics dem
+JOIN employee_salary sal
+ON dem.employee_id = sal.employee_id
+JOIN parks_departments dept
+ON sal.dept_id = dept.department_id
+WHERE dept.department_name = 'Parks and Recreation';
 ```
 
 ---
 
 ### 🔹 Aggregations & Grouping  
-#### 5️⃣ Find the average salary for each department  
+#### 6️⃣ Find the average salary for each department  
 ```sql
-SELECT pd.department_name, AVG(es.salary) AS average_salary 
-FROM parks_and_recreation.employee_demographics ed 
-LEFT JOIN parks_and_recreation.employee_salary es 
-ON ed.employee_id = es.employee_id
-LEFT JOIN parks_and_recreation.parks_departments pd
-ON es.dept_id = pd.department_id
-GROUP BY pd.department_name 
-ORDER BY average_salary DESC;
+SELECT dept.department_id, dept.department_name, ROUND(AVG(sal.salary), 2) AS dept_average_salary
+FROM employee_salary sal
+JOIN parks_departments dept
+ON sal.dept_id = dept.department_id
+GROUP BY sal.dept_id;
 ```
 
-#### 6️⃣ Count the number of employees in each department  
+#### 7️⃣ Count the number of employees in each department  
 ```sql
-SELECT pd.department_name, COUNT(ed.employee_id)
-FROM parks_and_recreation.employee_demographics ed
-LEFT JOIN parks_and_recreation.employee_salary es
-ON ed.employee_id = es.employee_id
-LEFT JOIN parks_and_recreation.parks_departments pd
-ON es.dept_id = pd.department_id
-GROUP BY pd.department_name;
+SELECT dept.department_id, dept.department_name, COUNT(sal.employee_id) AS number_of_employees
+FROM employee_salary sal
+JOIN parks_departments dept
+ON sal.dept_id = dept.department_id
+GROUP BY dept.department_id;
 ```
 
-#### 7️⃣ Find the highest and lowest salary in the organization  
+#### 8️⃣ Find the highest and lowest salary in the organization  
 ```sql
-SELECT MAX(es.salary) AS highest_salary, MIN(es.salary) AS lowest_salary
-FROM parks_and_recreation.employee_demographics ed
-LEFT JOIN parks_and_recreation.employee_salary es
-ON ed.employee_id = es.employee_id;
+SELECT MAX(salary) AS highest_salary, MIN(salary) AS lowest_salary
+FROM employee_salary;
 ```
 
 ---
 
-### 🔹 Advanced Queries & Subqueries  
-#### 8️⃣ Retrieve the top 3 highest-paid employees  
+### 🔹 More Queries & Subqueries  
+#### 9️⃣ Retrieve the top 3 highest-paid employees  
 ```sql
-SELECT ed.employee_id, ed.first_name, ed.last_name, es.salary
-FROM parks_and_recreation.employee_demographics ed 
-LEFT JOIN parks_and_recreation.employee_salary es
-ON ed.employee_id = es.employee_id
-ORDER BY es.salary DESC 
+SELECT employee_id, first_name, last_name, salary
+FROM employee_salary
+ORDER BY salary DESC
 LIMIT 3;
 ```
 
-#### 9️⃣ Find employees whose first name starts with 'A' (Ordered by Age)  
+#### 🔟 Find employees whose first name starts with 'A' (Ordered by Age)  
 ```sql
-SELECT employee_id, first_name, last_name, age 
-FROM parks_and_recreation.employee_demographics
-WHERE first_name LIKE 'A%' 
-ORDER BY age DESC;
+SELECT employee_id, first_name, last_name, age
+FROM employee_demographics
+WHERE first_name LIKE 'A%'
+ORDER BY age ASC;
 ```
 
-#### 🔟 Find employees earning more than the average salary  
+#### 1️⃣1️⃣ Find employees earning more than the average salary  
 ```sql
-SELECT employee_id, first_name, last_name, salary
-FROM parks_and_recreation.employee_salary
-WHERE salary > (
-	SELECT AVG(salary)
-    FROM parks_and_recreation.employee_salary
-    );
+SELECT employee_id, first_name, last_name, salary,
+(SELECT ROUND(AVG(salary),2) FROM employee_salary) AS average_salary
+FROM employee_salary
+WHERE salary >
+(SELECT AVG(salary)
+FROM employee_salary)
+ORDER BY salary DESC;
 ```
 
-#### 1️⃣1️⃣ Identify employees who do not have a department assigned  
+#### 1️⃣2️⃣ Identify employees who do not have a department assigned  
 ```sql
-SELECT ed.employee_id, ed.first_name, ed.last_name
-FROM parks_and_recreation.employee_demographics ed 
-LEFT JOIN parks_and_recreation.employee_salary es 
-ON ed.employee_id = es.employee_id
-WHERE es.dept_id IS NULL;
+SELECT employee_id, first_name, last_name, dept_id
+FROM employee_salary
+WHERE dept_id IS NULL;
 ```
 
 ## 💻**Technologies Used**
@@ -142,5 +145,4 @@ WHERE es.dept_id IS NULL;
 
 ---
 ✨ _Created by Halyusa Ard Wahyudi as part of a data analytics portfolio._ 🚀
-
 
